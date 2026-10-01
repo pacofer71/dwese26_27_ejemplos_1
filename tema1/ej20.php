@@ -55,23 +55,69 @@ $producto2 = [
     'subcategoria' => [
         [
             'nombre' => 'Android',
-            'subcategoria' => [],
+            'subcategoria' => [
+                [
+                    'nombre' => 'Samsung',
+                    'subcategoria' => []
+                ],
+                [
+                    'nombre' => 'Xiaomi',
+                    'subcategoria' => []
+                ]
+            ],
         ],
         [
             'nombre' => 'IPHONE',
             'subcategoria' => [
                 [
-                    'nombre'=>'Familia 13',
-                    'subcategoria'=>[],
+                    'nombre' => 'Familia 13',
+                    'subcategoria' => [
+                        [
+                            'nombre' => '13 PRO',
+                            'subcategoria' => []
+                        ],
+                        [
+                            'nombre' => '13 Super Pro',
+                            'subcategoria' => []
+                        ]
+                    ],
                 ],
                 [
-                    'nombre'=>'Famila 18',
-                    'subcategoria'=>[]
+                    'nombre' => 'Famila 18',
+                    'subcategoria' => []
                 ]
             ],
         ]
     ]
 ];
 $productos = [
-    $producto1, $producto2
+    $producto1,
+    $producto2
 ];
+//recursividad para recorrer este complejo array
+echo "<hr>";
+function recuperarNombres(array $productos)
+{
+    foreach ($productos as $producto) {
+
+        echo "-- " . $producto['nombre'] . "<br>";
+
+        if (!empty($producto['subcategoria'])) {
+            recuperarNombres($producto['subcategoria']);
+        }
+    }
+}
+recuperarNombres($productos);
+function recuperarNombres1(array $productos, $nivel = 0)
+{
+    foreach ($productos as $producto) {
+        echo str_repeat("&nbsp;", $nivel); // repite lo de dentro la cantidad de veces que indique nivel  
+        echo "- " . $producto['nombre'] . "<br>";
+
+        if (!empty($producto['subcategoria'])) {
+            recuperarNombres1($producto['subcategoria'], $nivel + 5);
+        }
+    }
+}
+echo "<hr>";
+recuperarNombres1($productos);
