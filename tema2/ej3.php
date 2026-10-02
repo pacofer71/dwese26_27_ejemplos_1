@@ -92,4 +92,4 @@ var_dump($persona1);
 var_dump($persona2);
 
 echo "<br>";
-echo "El nombre de persona1 es: ". $persona1->nombre. "y Los puestos son ".$persona1->puestos; 
+//echo "El nombre de persona1 es: ". $persona1->nombre. "y Los puestos son ".$persona1->puestos; 
