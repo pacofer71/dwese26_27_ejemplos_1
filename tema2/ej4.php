@@ -76,15 +76,17 @@ class Prueba
         $cad="El nombre es ".$this->nombre.", el cargo: ". $this->cargo. ", el id actualmente es: ".self::$id;
         $cad1="";
         foreach($this->provincias as $prov){
-            //
+            $cad1.="$prov, ";
+            
         }
+        return $cad." Las provincias son: ".$cad1;
     }
 }
 $prueba1 = new Prueba();
 $p = ['Almería', 'Málaga', 'Jaen'];
 var_dump($prueba1);
 $prueba1->setNombre("Prueba1")
-    ->setCargo("CArgo 1")
+    ->setCargo("Cargo 1")
     ->setProvincias($p);
 var_dump($prueba1);
 //------
