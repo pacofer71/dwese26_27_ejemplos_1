@@ -17,131 +17,75 @@ $personas = Persona::generarPersonas(50);
     <title>Document</title>
 </head>
 
-<body class="bg-slate-100 p-8">
+<body>
+    <main class="min-h-screen bg-slate-100 p-6">
+        <div class="max-w-7xl mx-auto">
+            <!-- Título / Cabecera -->
+            <h1 class="text-2xl font-bold text-slate-800 mb-6">Listado de Personal</h1>
 
-    <!-- Grid de personas -->
-    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <!-- Contenedor Grid (4 columnas en pantallas grandes) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 
-        <!-- CARD -->
-        <div class="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+                <!-- ======================================================== -->
+                <!-- AQUÍ EMPIEZA EL FOREACH                                  -->
+                <!-- ======================================================== -->
 
-            <!-- Cabecera -->
-            <div class="relative bg-gradient-to-br from-indigo-600 to-purple-700 px-5 py-6 text-white">
+                <!-- Card de Ejemplo (Persona 1) -->
+                <?php foreach($personas as $item): ?>
+                <article class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 border border-slate-200/80 overflow-hidden flex flex-col justify-between">
 
-                <!-- Avatar -->
-                <div class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-white/20 text-xl font-bold ring-4 ring-white/10">
-                    JP
-                </div>
+                    <!-- Cuerpo de la Card -->
+                    <div class="p-5">
+                        <!-- Identidad: Nombre y Username -->
+                        <div class="mb-4">
+                            <h2 class="text-lg font-semibold text-slate-900 leading-snug">
+                                <?= $item->nombre." ".$item->apellidos ?>
+                            </h2>
+                            <p class="text-sm font-medium text-indigo-600">
+                                <?= $item->username ?>
+                            </p>
+                        </div>
 
-                <h2 class="text-lg font-bold tracking-tight">
-                    Juan Pérez
-                </h2>
+                        <!-- Email -->
+                        <div class="mb-4 text-xs text-slate-500 flex items-center gap-1.5 truncate">
+                            <svg class="w-4 h-4 shrink-0 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            <span class="truncate"><?= $item->email ?></span>
+                        </div>
 
-                <p class="mt-1 text-sm text-indigo-100">
-                    @juanperez
-                </p>
+                        <!-- Descripción -->
+                        <p class="text-sm text-slate-600 line-clamp-3 mb-4 leading-relaxed">
+                            <?= $item->descripcion ?>
+                        </p>
+
+                        <!-- Provincias (Badges) -->
+                        <div class="space-y-1.5">
+                            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Provincias</span>
+                            <div class="flex flex-wrap gap-1.5">
+                                <?php foreach($item->provincias as $provincia): ?>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-700">
+                                    <?= $provincia ?>
+                                </span>
+                                <?php endforeach ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pie de la Card: Sueldo -->
+                    <div class="bg-slate-50 px-5 py-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs font-medium text-slate-500">Sueldo anual</span>
+                        <span class="text-sm font-bold text-emerald-600"><?= $item->sueldo ?> €</span>
+                    </div>
+
+                </article>
+                <?php endforeach; ?>
+                <!-- AQUÍ ACABA EL FOREACH                                   -->
+                <!-- ======================================================== -->
 
             </div>
-
-
-            <!-- Información -->
-            <div class="space-y-4 p-5">
-
-                <!-- Email -->
-                <div class="flex items-center gap-3">
-
-                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
-                        <svg class="h-4 w-4" fill="none" stroke="currentColor"
-                             stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  d="M3 8l9 6 9-6M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                        </svg>
-                    </div>
-
-                    <div class="min-w-0">
-                        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                            Email
-                        </p>
-
-                        <p class="truncate text-sm font-medium text-slate-700">
-                            juan.perez@email.com
-                        </p>
-                    </div>
-
-                </div>
-
-
-                <!-- Sueldo -->
-                <div class="flex items-center gap-3">
-
-                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
-                        <svg class="h-4 w-4" fill="none" stroke="currentColor"
-                             stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V6m0 12v-2m0-10a6 6 0 100 12 6 6 0 000-12z"/>
-                        </svg>
-                    </div>
-
-                    <div>
-                        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                            Sueldo
-                        </p>
-
-                        <p class="text-sm font-bold text-emerald-600">
-                            2.450,00 €
-                        </p>
-                    </div>
-
-                </div>
-
-
-                <!-- Descripción -->
-                <div class="border-t border-slate-100 pt-4">
-
-                    <p class="mb-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                        Descripción
-                    </p>
-
-                    <p class="line-clamp-3 text-sm leading-5 text-slate-600">
-                        Desarrollador web especializado en aplicaciones modernas,
-                        arquitectura de software y soluciones digitales.
-                    </p>
-
-                </div>
-
-
-                <!-- Provincias -->
-                <div class="border-t border-slate-100 pt-4">
-
-                    <p class="mb-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                        Provincias
-                    </p>
-
-                    <div class="flex flex-wrap gap-1.5">
-
-                        <span class="rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-medium text-indigo-700">
-                            Almería
-                        </span>
-
-                        <span class="rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-medium text-indigo-700">
-                            Granada
-                        </span>
-
-                        <span class="rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-medium text-indigo-700">
-                            Málaga
-                        </span>
-
-                    </div>
-
-                </div>
-
-            </div>
-
         </div>
-        <!-- FIN CARD -->
-
-    </div>
-
+    </main>
 </body>
 
 
