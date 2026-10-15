@@ -1,0 +1,20 @@
+{
+    "name": "pacofer/apipelis",
+    "description": "Ejemplo ApiPelis",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Paco Fernandez",
+            "email": "pacofer71@gmail.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^8.2"
+    }
+}
