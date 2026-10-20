@@ -96,7 +96,7 @@
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg
                                bg-white focus:outline-none focus:ring-2
                                focus:ring-blue-500 focus:border-blue-500">
-                        <option value="">Selecciona una categoría</option>
+                        <option value="" selected>Selecciona una categoría</option>
                         <option value="informatica">Informática</option>
                         <option value="administracion">Administración</option>
                         <option value="marketing">Marketing</option>
