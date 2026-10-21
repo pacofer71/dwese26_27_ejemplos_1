@@ -7,4 +7,6 @@ use App\Bbdd\Conexion;
 
 
 //Conexion::getConexion();
-Articulo::crearRegistrosFalsos(10);
+//Articulo::crearRegistrosFalsos(10);
+$articulos=Articulo::devolverTodo();
+var_dump($articulos);

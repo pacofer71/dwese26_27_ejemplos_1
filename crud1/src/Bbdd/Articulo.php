@@ -3,6 +3,7 @@
 namespace App\Bbdd;
 
 use \PDOException;
+use \PDO;
 
 class Articulo extends Conexion
 {
@@ -10,10 +11,7 @@ class Articulo extends Conexion
     private string $nombre;
     private string $descripcion;
 
-    public function __construct()
-    {
-        
-    }
+    
     // CRUD __________________________
     public function create(): void
     {
@@ -38,11 +36,33 @@ class Articulo extends Conexion
         for ($i = 0; $i < $cantidad; $i++) {
             $nombre = $faker->unique()->words(2, true);
             $descripcion = $faker->text();
-            $articulo = new Articulo()
+            (new Articulo())
                 ->setNombre($nombre)
                 ->setDescripcion($descripcion)
                 ->create();
         }
+    }
+
+    public static function borrarTodo(): void{
+        $q="delete from articulos";
+        $stmt=parent::getConexion()->prepare($q);
+         try {
+            $stmt->execute();
+        } catch (PDOException $ex) {
+            die("Error en borrar todo: " . $ex->getMessage());
+        }
+    }
+
+    public static function devolverTodo(): array{
+        $q="select * from articulos order by id desc";
+        $stmt=parent::getConexion()->prepare($q);
+        try {
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (PDOException $ex) {
+            die("Error en recuperar todo: " . $ex->getMessage());
+        }
+
     }
 
     /**
