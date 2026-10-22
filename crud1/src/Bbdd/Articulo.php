@@ -11,7 +11,7 @@ class Articulo extends Conexion
     private string $nombre;
     private string $descripcion;
 
-    
+
     // CRUD __________________________
     public function create(): void
     {
@@ -43,26 +43,27 @@ class Articulo extends Conexion
         }
     }
 
-    public static function borrarTodo(): void{
-        $q="delete from articulos";
-        $stmt=parent::getConexion()->prepare($q);
-         try {
+    public static function borrarTodo(): void
+    {
+        $q = "delete from articulos";
+        $stmt = parent::getConexion()->prepare($q);
+        try {
             $stmt->execute();
         } catch (PDOException $ex) {
             die("Error en borrar todo: " . $ex->getMessage());
         }
     }
 
-    public static function devolverTodo(): array{
-        $q="select * from articulos order by id desc";
-        $stmt=parent::getConexion()->prepare($q);
+    public static function devolverTodo(): array
+    {
+        $q = "select * from articulos order by id desc";
+        $stmt = parent::getConexion()->prepare($q);
         try {
             $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_OBJ);
+            return $stmt->fetchAll(PDO::FETCH_OBJ); 
         } catch (PDOException $ex) {
             die("Error en recuperar todo: " . $ex->getMessage());
         }
-
     }
 
     /**
