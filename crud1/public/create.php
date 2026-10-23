@@ -15,6 +15,12 @@ require __DIR__."/../vendor/autoload.php";
         $errores=false;
         if(!Validacion::esLongitudCadenaValida('nombre', $nombre, 3, 40)){
             $errores=true;
+        }else{
+            //la loongitud del nombre es correcta
+            //comprobemos si esta o no duplicado
+            if(Validacion::existeNombre($nombre)){
+                $errores=true;
+            }
         }
         if(!Validacion::esLongitudCadenaValida('descripcion', $descripcion, 10, 250)){
             $errores=true;

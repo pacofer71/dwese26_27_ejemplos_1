@@ -66,6 +66,17 @@ class Articulo extends Conexion
         }
     }
 
+    public static function existeNombre(string $nombre): bool{
+        $q="select 1 from articulos where nombre=:n";
+        $stmt = parent::getConexion()->prepare($q);
+        try {
+            $stmt->execute([':n'=>$nombre]);
+        } catch (PDOException $ex) {
+            die("Error en existeNombre: " . $ex->getMessage());
+        }
+        return count($stmt->fetchAll(PDO::FETCH_OBJ))!=0;
+    }
+
     /**
      * Get the value of id
      */

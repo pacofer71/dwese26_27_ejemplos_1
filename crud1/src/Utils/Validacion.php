@@ -1,5 +1,8 @@
 <?php
 namespace App\Utils;
+
+use App\Bbdd\Articulo;
+
 abstract class Validacion{
     public static function limpiarCadenas(string $cadena): string{
         return htmlspecialchars(trim($cadena));
@@ -11,6 +14,13 @@ abstract class Validacion{
             return false;
         }
         return true;
+    }
+    public static function existeNombre(string $nombre): bool{
+        if(Articulo::existeNombre($nombre)){
+            $_SESSION['err_nombre']="Error, el nombre ya está registrado.";
+            return true;
+        }
+        return false;
     }
 
     public static function pintarError(string $nombreError): void{

@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 use App\Bbdd\Articulo;
 
 require __DIR__ . "/../vendor/autoload.php";
@@ -14,6 +14,9 @@ $articulos = Articulo::devolverTodo();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- CDN TAilwind cSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- CDN SweetAlert2 -->
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <title>Articulos</title>
 </head>
 
@@ -156,7 +159,21 @@ $articulos = Articulo::devolverTodo();
         </div>
 
     </div>
-
+<?php
+    if(isset($_SESSION['mensaje'])){
+        echo <<< MANOLO
+            <script>
+                Swal.fire({
+                    icon: "success",
+                    title: "{$_SESSION['mensaje']}",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            </script>
+        MANOLO;
+        unset($_SESSION['mensaje']);
+    }
+?>
 </body>
 
 </html>
