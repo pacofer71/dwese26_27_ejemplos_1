@@ -15,8 +15,8 @@ abstract class Validacion{
         }
         return true;
     }
-    public static function existeNombre(string $nombre): bool{
-        if(Articulo::existeNombre($nombre)){
+    public static function existeNombre(string $nombre, ?int $id=null): bool{
+        if(Articulo::existeNombre($nombre, $id)){
             $_SESSION['err_nombre']="Error, el nombre ya está registrado.";
             return true;
         }

@@ -43,12 +43,23 @@ class Articulo extends Conexion
         }
     }
 
-    public static function borrarTodo(): void
+    public static function borrarTodo(?int $id = null): void
     {
-        $q = "delete from articulos";
+        $q = ($id === null) ? "delete from articulos" : "delete from articulos where id=:i";
         $stmt = parent::getConexion()->prepare($q);
         try {
-            $stmt->execute();
+            ($id === null) ? $stmt->execute() : $stmt->execute([':i' => $id]);
+        } catch (PDOException $ex) {
+            die("Error en borrar todo: " . $ex->getMessage());
+        }
+    }
+    //esta funcion YA no seria necesaria, borrarTodo contempla los dos casos
+    public static function borrarPorId(int $id)
+    {
+        $q = "delete from articulos where id=:i";
+        $stmt = parent::getConexion()->prepare($q);
+        try {
+            $stmt->execute([':i' => $id]);
         } catch (PDOException $ex) {
             die("Error en borrar todo: " . $ex->getMessage());
         }
@@ -60,21 +71,46 @@ class Articulo extends Conexion
         $stmt = parent::getConexion()->prepare($q);
         try {
             $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_OBJ); 
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
         } catch (PDOException $ex) {
             die("Error en recuperar todo: " . $ex->getMessage());
         }
     }
 
-    public static function existeNombre(string $nombre): bool{
-        $q="select 1 from articulos where nombre=:n";
+    public static function existeNombre(string $nombre, ?int $id = null): bool
+    {
+        $q = ($id === null) ? "select 1 from articulos where nombre=:n" :
+            "select 1 from articulos where nombre=:n AND id != :i";
         $stmt = parent::getConexion()->prepare($q);
         try {
-            $stmt->execute([':n'=>$nombre]);
+            ($id === null) ? $stmt->execute([':n' => $nombre]) : $stmt->execute([':n' => $nombre, ':i' => $id]);
+            return count($stmt->fetchAll(PDO::FETCH_OBJ)) != 0;
         } catch (PDOException $ex) {
             die("Error en existeNombre: " . $ex->getMessage());
         }
-        return count($stmt->fetchAll(PDO::FETCH_OBJ))!=0;
+    }
+
+    // devolver articulo por id
+    public static function devolverArticuloPorId(int $id): array
+    {
+        $q = "select * from articulos where id=?";
+        $stmt = parent::getConexion()->prepare($q);
+        try {
+            $stmt->execute([$id]);
+            return $stmt->fetchAll(PDO::FETCH_OBJ); //devolvemos un array con un objeto o un array vacio
+        } catch (PDOException $ex) {
+            die("Error buscarPorId: " . $ex->getMessage());
+        }
+    }
+    public function update(int $id)
+    {
+        $q = "update articulos set nombre=:n, descripcion=:d where id=:i";
+        $stmt = parent::getConexion()->prepare($q);
+        try {
+            $stmt->execute([':n' => $this->nombre, ':d' => $this->descripcion, ':i' => $id]);
+        } catch (PDOException $ex) {
+            die("Error en update: " . $ex->getMessage());
+        }
     }
 
     /**
