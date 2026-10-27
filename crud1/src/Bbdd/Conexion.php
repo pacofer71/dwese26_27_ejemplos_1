@@ -7,7 +7,7 @@ use \PDOException;
 abstract class Conexion{
     private static ?PDO $conexion=null;
 
-    public static function getConexion(): PDO{
+    protected static function getConexion(): PDO{
         if(self::$conexion==null){
             //setearemos la conexion;
             self::setConexion();
