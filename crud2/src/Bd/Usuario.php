@@ -51,6 +51,20 @@ class Usuario extends Conexion{
             ->create();
         }
     }
+    //------------------------------------------------------------------------
+    public static function esLoginValido(string $username, string $password): int{
+        $q="select perfil, password from usuarios where username=:u";
+        $stmt=self::executeQuery($q, [':u'=>$username], true);
+        $datosDevueltos=$stmt->fetchAll(PDO::FETCH_OBJ);
+        if(count($datosDevueltos)){
+            // si estoy aquí el usuario existe, comprobemos el password
+            if(password_verify($password, $datosDevueltos[0]->password)){
+                //usuario y password correctos, devuelvo el perfil
+                return $datosDevueltos[0]->perfil;
+            }
+        }
+        return -1;
+    }
 
     /**
      * Set the value of id

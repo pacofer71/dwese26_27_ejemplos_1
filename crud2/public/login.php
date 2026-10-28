@@ -7,9 +7,20 @@ use App\Utils\Validacion;
     require __DIR__."/../vendor/autoload.php";
     $username="";
     $password="";
+
     if($_SERVER['REQUEST_METHOD']=='POST'){
         $username=Validacion::sanearCadena($_POST['username']);
         $password=Validacion::sanearCadena($_POST['password']);
+
+        $perfil=Validacion::esLoginValido($username, $password);
+        if($perfil!=-1){
+            //login correcto
+            session_regenerate_id(true); //cuando sean variables de sesion de acceso tipo login
+            $_SESSION['perfil']=$perfil;
+            $_SESSION['username']=$username;
+            header("Location:sitio.php");
+            exit;
+        }
     }
 ?>
 <!DOCTYPE html>
@@ -114,6 +125,9 @@ use App\Utils\Validacion;
                     </button>
 
                 </div>
+                <?php
+                    Validacion::pintarError('err_login');
+                ?>
 
             </form>
 
