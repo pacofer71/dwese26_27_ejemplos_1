@@ -34,10 +34,53 @@ class Articulo extends Conexion
         );
     }
 
-    public static function delete(): void
+    public static function delete(?int $id = null): void
     {
-        $q = "delete from articulos";
-        self::executeQuery($q);
+
+        $q = ($id == null) ? "delete from articulos" : "delete from articulos where id=:i";
+        $opciones=($id==null) ? [] : [':i'=>$id];
+        /*
+        self::executeQuery(
+            $q,
+            ($id == null) ? [] : [':i' => $id]
+        );
+        */
+        self::executeQuery($q, $opciones);
+    }
+
+    public static function read(): array
+    {
+        $q = "select * from articulos order by id desc";
+        $stmt = self::executeQuery($q, [], true);
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public static function devolverArticulo(int $id): array{
+        $q="select * from articulos where id=:i";
+        $stmt=self::executeQuery($q, [':i'=>$id], true);
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    }
+
+    public function update(int $id){
+        $q="update articulos set nombre=:n, descripcion=:d, precio=:p where id=:i";
+        self::executeQuery(
+            $q,
+            [':n'=>$this->nombre, ':d'=>$this->descripcion, ':p'=>$this->precio, ':i'=>$id],
+            false
+            );
+    }
+
+    public static function existeNombreArticulo(string $nombre, int $id=-1): bool
+    {
+        $q = "select 1 from articulos where nombre=:n and id!=:i";
+        $stmt = self::executeQuery(
+            $q, 
+            [':n' => $nombre, ':i'=>$id], 
+            true
+        );
+        $datos = $stmt->fetchAll(PDO::FETCH_OBJ);
+        return count($datos) != 0;
     }
 
     public static function generarArticulos(int $cantidad)
