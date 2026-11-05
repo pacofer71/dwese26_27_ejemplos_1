@@ -14,12 +14,23 @@ class Post extends Conexion{
     private int $user_id;
     private int $category_id;
 
-    private static function executeQuery(string $q, array $parametros=[], bool $devolverAlgo){
-
+    private static function executeQuery(string $q, array $parametros=[], bool $devolverAlgo=false): bool|PDOStatement{
+        $stmt=parent::getConexion()->prepare($q);
+        try{
+            $stmt->execute($parametros);
+            return ($devolverAlgo) ? $stmt : false;
+        }catch(PDOException $ex){
+            throw new PDOException("Error en query: ".$ex->getMessage());
+        }
     }
 
     public static function recuperarPostsInicio(): array{
-
+        $q="select posts.*, email, nombre, color from posts
+        join categorias on categorias.id=posts.category_id
+        join usuarios on usuarios.id=posts.user_id
+        where estado='Publicado' order by posts.id desc";
+        $stmt=self::executeQuery($q, [], true);
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
 
