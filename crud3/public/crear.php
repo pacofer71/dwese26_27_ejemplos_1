@@ -38,6 +38,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!Validacion::categoriaValida($categoria)) {
         $errores = true;
     }
+
+    //VAmos a procesar la imagen
+    //var_dump($_FILES['imagen']);
+    //die();
+    $miImgen="/imagenes/default.jpg";
+    if(is_uploaded_file($_FILES['imagen']['tmp_name'])){
+        // Si pasa esto el usuario ha subido un archivo
+        //compruebo qua haya subido una imagen y que no exceda los 2mb en este caso
+        if(Validacion::imagenValida($_FILES['imagen']['type'], $_FILES['imagen']['size'])){
+            //si estoy aqui tipo y tamaño correctos
+            //creo un nombre nuevo para no sobreescribir archivos
+            //guardo la extension del archivo original jpg, png, ico la que sea
+            $extension=strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
+            $miImagen="/imagenes/".uniqid().".$extension"; // /imagenes/123564.jpg
+            if(!move_uploaded_file($_FILES['imagen']['tmp_name'], ".$miImagen")){
+                $_SESSION['err_imagen']="*** Error, no se pudo guardar la imagen";
+                $errores=true;
+            }
+
+        }else{
+            $errores=true;
+        }
+
+    }
+
 }
 $checkedPublicado = ($estado == 'Publicado') ? "checked" : "";
 $checkedBorrador = ($estado == 'Borrador') ? "checked" : "";
