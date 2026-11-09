@@ -33,6 +33,15 @@ class Post extends Conexion{
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
+    public static function recuperarPostsUsuario(string $email): array{
+        $q="select posts.*, nombre, color, usuarios.id as idUser from posts
+        join categorias on categorias.id=posts.category_id
+        join usuarios on usuarios.id=posts.user_id
+        where email=:e order by posts.id desc";
+        $stmt=self::executeQuery($q, [':e'=>$email], true);
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
+
 
 
     
