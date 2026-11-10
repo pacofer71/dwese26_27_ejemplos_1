@@ -1,6 +1,6 @@
 <?php
 session_start();
-if(!isset($_SESSION['email'])){
+if (!isset($_SESSION['email'])) {
     header("Location:index.php");
     exit;
 }
@@ -8,8 +8,9 @@ require __DIR__ . "/../vendor/autoload.php";
 
 use App\Bd\Post;
 use App\Utils\Navegacion;
-$email=$_SESSION['email'];
-$posts=Post::recuperarPostsUsuario($email);
+
+$email = $_SESSION['email'];
+$posts = Post::recuperarPostsUsuario($email);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,6 +22,8 @@ $posts=Post::recuperarPostsUsuario($email);
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <!-- CDN Iconos FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" integrity="sha512-QeR2VH+lsBE5LSAe1Q5EnTBbe7XTBubt8dG93Y7gidSgdMCr8nVqKcfKAMyN96SV8KDbZVTDXChatu5G2KQGzg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <!-- CDN SweetAlert2 -->
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Posts</title>
 </head>
 
@@ -82,86 +85,89 @@ $posts=Post::recuperarPostsUsuario($email);
                         <!-- Cuerpo de la tabla -->
                         <tbody class="divide-y divide-gray-200">
 
-                           
-                             <?php foreach($posts as $item):
-                                $estiloEstado=($item->estado)=='Publicado' ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"; 
+
+                            <?php foreach ($posts as $item):
+                                $estiloEstado = ($item->estado) == 'Publicado' ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700";
                             ?>
-                            <tr class="hover:bg-gray-50 transition">
+                                <tr class="hover:bg-gray-50 transition">
 
-                                <!-- Título y código -->
-                                <td class="px-6 py-5">
-                                    <div class="font-semibold text-gray-800">
-                                        <?= $item->titulo ?>
-                                    </div>
-                                    <div class="text-xs text-gray-400 mt-1">
-                                        Código: <?= $item->id ?>
-                                    </div>
-                                </td>
+                                    <!-- Título y código -->
+                                    <td class="px-6 py-5">
+                                        <div class="font-semibold text-gray-800">
+                                            <?= $item->titulo ?>
+                                        </div>
+                                        <div class="text-xs text-gray-400 mt-1">
+                                            Código: <?= $item->id ?>
+                                        </div>
+                                    </td>
 
-                                <!-- Contenido -->
-                                <td class="px-6 py-5 max-w-xs">
-                                    <p>
-                                       <?= $item->contenido ?>
-                                    </p>
-                                </td>
+                                    <!-- Contenido -->
+                                    <td class="px-6 py-5 max-w-xs">
+                                        <p>
+                                            <?= $item->contenido ?>
+                                        </p>
+                                    </td>
 
-                                <!-- Imagen -->
-                                <td class="px-6 py-5">
-                                    <img src=".<?= $item->imagen ?>"
-                                        alt="Imagen del post"
-                                        class="w-20 h-14 object-cover rounded-lg shadow-sm">
-                                </td>
+                                    <!-- Imagen -->
+                                    <td class="px-6 py-5">
+                                        <img src=".<?= $item->imagen ?>"
+                                            alt="Imagen del post"
+                                            class="w-20 h-14 object-cover rounded-lg shadow-sm">
+                                    </td>
 
-                                <!-- Categoría -->
-                                <td class="px-6 py-5">
-                                    <span class="bg-[<?= $item->color ?>] text-white px-3 py-1
+                                    <!-- Categoría -->
+                                    <td class="px-6 py-5">
+                                        <span class="bg-[<?= $item->color ?>] text-white px-3 py-1
                                              rounded-full text-xs font-semibold whitespace-nowrap">
-                                        <?= $item->nombre ?>
-                                    </span>
-                                </td>
+                                            <?= $item->nombre ?>
+                                        </span>
+                                    </td>
 
-                                <!-- Estado -->
-                                <td class="px-6 py-5">
-                                    <span class="inline-flex items-center gap-1.5
+                                    <!-- Estado -->
+                                    <td class="px-6 py-5">
+                                        <span class="inline-flex items-center gap-1.5
                                             <?= $estiloEstado ?>
                                              px-3 py-1 rounded-full text-xs font-semibold">
-                                        <i class="fa-solid fa-circle-check"></i>
-                                        <?= $item->estado ?>
-                                    </span>
-                                </td>
+                                            <i class="fa-solid fa-circle-check"></i>
+                                            <?= $item->estado ?>
+                                        </span>
+                                    </td>
 
-                                <!-- Acciones -->
-                                <td class="px-6 py-5">
-                                    <div class="flex justify-center items-center gap-3">
+                                    <!-- Acciones -->
+                                    <td class="px-6 py-5">
+                                        <form method="POST" action="borrar.php">
+                                            <input type="hidden" name="idPost" value="<?= $item->id ?>" />
+                                            <div class="flex justify-center items-center gap-3">
 
-                                        <!-- Editar -->
-                                        <a href="editar.php?id=1"
-                                            title="Editar"
-                                            class="text-blue-600 hover:text-blue-800
+                                                <!-- Editar -->
+                                                <a href="editar.php?id=<?= $item->id ?>"
+                                                    title="Editar"
+                                                    class="text-blue-600 hover:text-blue-800
                                               bg-blue-50 hover:bg-blue-100
                                               p-2 rounded-lg transition">
 
-                                            <i class="fa-solid fa-pen-to-square"></i>
+                                                    <i class="fa-solid fa-pen-to-square"></i>
 
-                                        </a>
+                                                </a>
 
-                                        <!-- Borrar -->
-                                        <a href="borrar.php?id=1"
-                                            title="Borrar"
-                                            class="text-red-600 hover:text-red-800
+                                                <!-- Borrar -->
+                                                <button type="submit" onclick="return confirm('¿Borrar permanentemente el Post?')"
+                                                    title="Borrar"
+                                                    class="text-red-600 hover:text-red-800
                                               bg-red-50 hover:bg-red-100
                                               p-2 rounded-lg transition">
 
-                                            <i class="fa-solid fa-trash"></i>
+                                                    <i class="fa-solid fa-trash"></i>
 
-                                        </a>
+                                                </button>
 
-                                    </div>
-                                </td>
+                                            </div>
+                                        </form>
+                                    </td>
 
-                            </tr>
+                                </tr>
                             <?php endforeach; ?>
-                           
+
 
                         </tbody>
 
@@ -173,8 +179,22 @@ $posts=Post::recuperarPostsUsuario($email);
 
         </div>
 
-    </body>
-
+    
+<?php
+if(isset($_SESSION['mensaje'])){
+    echo <<< TXT
+        <script>                        
+        Swal.fire({
+                icon: "success",
+                title: "{$_SESSION['mensaje']}",
+                showConfirmButton: false,
+                timer: 1500
+        });
+        </script>
+    TXT;
+    unset($_SESSION['mensaje']);
+}
+?>
 </body>
 
 </html>

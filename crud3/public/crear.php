@@ -6,18 +6,24 @@ if (!isset($_SESSION['email'])) {
 }
 require __DIR__ . "/../vendor/autoload.php";
 
-use App\Bd\Categoria;
-use App\Utils\Navegacion;
-use App\Utils\Validacion;
+//use App\Bd\Categoria;
+//use App\Bd\Post;
+//use App\Bd\Usuario;
+use App\Bd\{Categoria, Post, Usuario};
+//use App\Utils\Navegacion;
+//use App\Utils\Validacion;
+use App\Utils\{Validacion, Navegacion};
 
 $categorias = Categoria::read();
 $email = $_SESSION['email'];
+
 $titulo = "";
 $contenido = "";
 $estado = "";
 $categoria = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    
     $titulo = Validacion::sanearCadena($_POST['titulo']);
     $contenido = Validacion::sanearCadena($_POST['contenido']);
     $categoria = (int) $_POST['categoria'];
@@ -42,7 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //VAmos a procesar la imagen
     //var_dump($_FILES['imagen']);
     //die();
-    $miImgen="/imagenes/default.jpg";
+
+    $miImagen="/imagenes/default.jpg";
     if(is_uploaded_file($_FILES['imagen']['tmp_name'])){
         // Si pasa esto el usuario ha subido un archivo
         //compruebo qua haya subido una imagen y que no exceda los 2mb en este caso
@@ -61,6 +68,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errores=true;
         }
 
+    }
+    if(!$errores){
+        // guardamos el post, ojo la imagen YA esta guardada en imagenes si todo fue bien
+        $id=Usuario::getIdByEmail($email);
+        (new Post)
+        ->setTitulo($titulo)
+        ->setContenido($contenido)
+        ->setEstado($estado)
+        ->setCategory_id($categoria)
+        ->setImagen($miImagen)
+        ->setUser_id($id)
+        ->create();
+        $_SESSION['mensaje']="Post Guardado";
+        header("Location:admin.php");
+        exit;
     }
 
 }
