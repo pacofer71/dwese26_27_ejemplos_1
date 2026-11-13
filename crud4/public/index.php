@@ -1,6 +1,7 @@
 <?php
 
 use App\Bd\Articulo;
+use App\Utils\Navegacion;
 use \Carbon\Carbon;
     session_start();
     require __DIR__."/../vendor/autoload.php";
@@ -20,7 +21,7 @@ use \Carbon\Carbon;
 </head>
 
 <body class="bg-gray-100 min-h-screen">
-
+    <?php Navegacion::pintarBarraNavegacion() ?>
     <main class="max-w-7xl mx-auto px-4 py-10">
 
         <!-- Cabecera -->
@@ -92,15 +93,12 @@ use \Carbon\Carbon;
                     <!-- Título -->
                     <h2 class="text-xl font-bold text-gray-800 mb-3
                                hover:text-indigo-600 transition">
-                        El futuro del desarrollo web
+                        <?= $item->titulo ?>
                     </h2>
 
                     <!-- Descripción -->
                     <p class="text-gray-600 text-sm leading-relaxed">
-                        Descubre las últimas tendencias en desarrollo web,
-                        nuevas tecnologías y herramientas que están
-                        transformando la manera de crear aplicaciones.
-                        Un recorrido por el presente y futuro de la web...
+                        <?= $item->contenido ?>
                     </p>
 
                     <!-- Separador -->
@@ -112,13 +110,6 @@ use \Carbon\Carbon;
                                 <i class="fa-solid fa-calendar-days mr-1"></i>
                                 Publicación reciente
                             </span>
-
-                            <a href="articulo.php?id=1"
-                               class="text-indigo-600 font-semibold text-sm
-                                      hover:text-indigo-800 transition">
-                                Leer artículo
-                                <i class="fa-solid fa-arrow-right ml-1"></i>
-                            </a>
 
                         </div>
 

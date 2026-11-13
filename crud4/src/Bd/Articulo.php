@@ -32,6 +32,15 @@ namespace App\Bd;
         $stmt=self::executeQuery($q, [], true);
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
+    public static function getArticulosByEmail(string $email): array{
+         $q="select articulos.*, nombre, color from articulos
+        join usuarios on usuarios.id=articulos.usuario_id
+        join categorias on categorias.id=articulos.categoria_id
+        where email=:e order by created_at desc";
+
+        $stmt=self::executeQuery($q, [':e'=>$email], true);
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
     
 
     /**
