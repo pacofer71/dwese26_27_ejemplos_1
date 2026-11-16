@@ -30,6 +30,12 @@ use \PDOStatement;
         return -1;
     }
 
+    public static function getIdUserByEmail(string $email): int{
+        $q="select id from usuarios where email=:e";
+        $stmt=self::executeQuery($q, [':e'=>$email], true);
+        return $stmt->fetchAll(PDO::FETCH_OBJ)[0]->id;
+    }
+
     /**
      * Set the value of id
      *

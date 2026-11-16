@@ -23,6 +23,21 @@ namespace App\Bd;
         }
     }
 
+    public function create(){
+        $q="insert int articulos(titulo, contenido, publicado, imagen, categoria_id, usuario_id) values(:t, :c, :p, :img, :ci, :ui)";
+        self::executeQuery(
+            $q,
+            [
+                ':t'=>$this->titulo,
+                ':c'=>$this->contenido,
+                ':p'=>$this->publicado,
+                ':img'=>$this->imagen,
+                ':ci'=>$this->categoria_id,
+                ':ui'=>$this->usuario_id
+            ]
+        );
+        }
+
     public static function devolverArticulosInicio(): array{
         $q="select articulos.*, nombre, color, email from articulos
         join usuarios on usuarios.id=articulos.usuario_id

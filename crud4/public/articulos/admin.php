@@ -1,6 +1,7 @@
 <?php
 
 use App\Bd\Articulo;
+use App\Utils\Navegacion;
 use Carbon\Carbon;
 
     session_start();
@@ -28,6 +29,7 @@ use Carbon\Carbon;
 
 
 <body class="bg-gray-50 min-h-screen text-gray-800">
+    <?php Navegacion::pintarBarraNavegacion()  ?>
 
     <main class="max-w-7xl mx-auto px-6 py-10">
 
@@ -74,6 +76,8 @@ use Carbon\Carbon;
                         <?php foreach($articulos as $item): 
                             $fecha_creacion=Carbon::parse($item->created_at);
                             $fecha_actualizacion=Carbon::parse($item->updated_at);
+                            $color=($item->publicado=='Si') ? "bg-green-100 text-green-700" :
+                            "bg-red-100 text-red-700";
                         ?>
                         <tr class="hover:bg-gray-50 transition">
 
@@ -96,14 +100,14 @@ use Carbon\Carbon;
 
                             <!-- Categoría -->
                             <td class="px-5 py-4">
-                                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-[<?= $item->color ?>] text-white">
                                     <?= $item->nombre ?>
                                 </span>
                             </td>
 
                             <!-- Estado -->
                             <td class="px-5 py-4 text-center">
-                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold <?= $color ?> ">
                                     <i class="fas fa-check-circle"></i>
                                     <?= $item->publicado ?>
                                 </span>
@@ -121,18 +125,18 @@ use Carbon\Carbon;
                             <td class="px-5 py-4 whitespace-nowrap">
                                 <div class="text-gray-700">
                                     <i class="far fa-calendar-plus text-gray-400 mr-1"></i>
-                                    <?= $item->created_at ?>
+                                    <?= $fecha_creacion->format('d/m/Y') ?>
                                 </div>
-                                <span class="text-xs text-gray-400">09:30</span>
+                                <span class="text-xs text-gray-400"><?= $fecha_creacion->format('h:i') ?></span>
                             </td>
 
                             <!-- Fecha actualización -->
                             <td class="px-5 py-4 whitespace-nowrap">
                                 <div class="text-gray-700">
                                     <i class="far fa-clock text-gray-400 mr-1"></i>
-                                    12/11/2026
+                                    <?= $fecha_actualizacion->format('d/m/Y') ?>
                                 </div>
-                                <span class="text-xs text-gray-400">11:45</span>
+                                <span class="text-xs text-gray-400"><?= $fecha_actualizacion->format('h:i') ?></span>
                             </td>
 
                             <!-- Acciones -->
