@@ -2,10 +2,15 @@
 
 use App\Bd\Categoria;
 use App\Bd\Usuario;
+use App\Bd\Articulo;
 use App\Utils\Navegacion;
 use App\Utils\Validacion;
 
 session_start();
+if(!isset($_SESSION['email'])){
+    header("Location:admin.php");
+    exit;
+}
 require __DIR__ . "/../../vendor/autoload.php";
 $categorias = Categoria::read();
 
@@ -34,9 +39,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!Validacion::publicadoValido($publicado)) {
         $errores = true;
     }
+
+    //vamos a procesar la imagen
+    $imagen="/imagenes/default.jpg";
+    if(is_uploaded_file($_FILES['imagen']['tmp_name'])){
+        $file=$_FILES['imagen'];
+        //Nos han subido un fichero vamos a validarlo
+        if(Validacion::imagenValida($file['type'], $file['size'])){
+            //el archivo esta correcto, es una imagenn y se ajusta al tamaño permitido
+            $extension=strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+            $imagen="/imagenes/".uniqid().".$extension"; // /imagenes/12345asf.ico
+            //movemos la imagen desde tempora a su ubicacion definitiva
+            if(!move_uploaded_file($file['tmp_name'], "./..$imagen")){
+                $_SESSION['err_imagen']="Error, no se pudo guardar la imagen";
+            }
+
+        }else{
+            $errores=true;
+        }
+    }
+
     if (!$errores) {
         //insertamos
         $user_id=Usuario::getIdUserByEmail($_SESSION['email']);
+        (new Articulo)
+            ->setTitulo($titulo)
+            ->setCategoria_id($categoria_id)
+            ->setUsuario_id($user_id)
+            ->setContenido($contenido)
+            ->setPublicado($publicado)
+            ->setImagen($imagen)
+            ->create();
+        $_SESSION['mensaje']="Artículo guardado";
+        header("Location:admin.php");
+        exit;
     }
 }
 //para que recuerde si he marcado Si o No
@@ -159,6 +195,7 @@ $ckNo = ($publicado == 'No') ? "checked" : "";
             <img src="" class="w-full h-full object-cover rounded" id="preview" />
 
         </div>
+        <?php Validacion::pintarError('err_imagen') ?>
 
 
         <div class="flex flex-col sm:flex-row justify-end gap-3 border-t border-gray-100 pt-6">
