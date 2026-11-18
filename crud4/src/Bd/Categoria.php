@@ -19,6 +19,15 @@ namespace App\Bd;
         }
     }
 
+    public function crear(){
+        $q="insert into categorias(nombre, color) values(:n, :c)";
+        self::executeQuery(
+            $q,
+            [':n'=>$this->nombre, ':c'=>$this->color],
+            false
+        );
+    }
+
     public static function read(): array{
         $q="select * from categorias order by nombre";
         $stmt=self::executeQuery($q, [], true);
@@ -33,6 +42,12 @@ namespace App\Bd;
             $ids[]=$dato->id;
         }
         return $ids; //[1,2,3,4,5]
+    }
+    public static function existeCategoria(string $nombre): bool{
+        $q="select 1 from categorias where nombre=:n";
+        $stmt=self::executeQuery($q, [':n'=>$nombre], true);
+        $datos=$stmt->fetchAll(PDO::FETCH_OBJ);
+        return count($datos)!=0;
     }
 
     /**

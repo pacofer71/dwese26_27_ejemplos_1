@@ -12,6 +12,21 @@ abstract class Validacion
         return htmlspecialchars(trim($cadena));
     }
 
+    public static function colorValido(string $color): bool{
+        if(!preg_match('/^#[0-9A-Fa-f]{6}$/', $color)){
+            $_SESSION['err_color']="*** Error, color inválido o no seleccionado";
+            return false;
+        }
+        return true;
+    }
+    public static function existeCategoria(string $nombre):bool{
+        if(Categoria::existeCategoria($nombre)){
+            $_SESSION['err_nombre']="*** Error \"$nombre\" ya está registrada";
+            return true;
+        }
+        return false;
+    }
+
     public static function longitudCadenaValida(string $n, string $v, int $min, int $max): bool
     {
         if (strlen($v) < $min || strlen($v) > $max) {

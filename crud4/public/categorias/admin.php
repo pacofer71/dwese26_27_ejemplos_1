@@ -1,6 +1,7 @@
 <?php
 
 use App\Bd\Categoria;
+use App\Utils\Navegacion;
 
     session_start();
     if(!isset($_SESSION['perfil']) || $_SESSION['perfil']!=1){
@@ -28,9 +29,15 @@ use App\Bd\Categoria;
     <title>Categorias</title>
 </head>
 
-<body class="bg-slate-100 min-h-screen p-8">
+<body class="">
+    <?php Navegacion::pintarBarraNavegacion() ?>
 
-    <div class="max-w-5xl mx-auto">
+    <div class="max-w-5xl mx-auto mt-4">
+        <div class="flex flex-row-reverse mb-2">
+            <a href="crear.php" class="p-2 rounded-lg text-white font-semibold bg-green-500 hover:bg-green-700">
+                <i class="fas fa-add mr-2"></i>Nueva
+            </a>
+        </div>
 
         <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
 
@@ -38,10 +45,10 @@ use App\Bd\Categoria;
             <div class="px-6 py-5 border-b border-slate-200">
                 <h1 class="text-xl font-bold text-slate-800">
                     <i class="fa-solid fa-palette text-indigo-600 mr-2"></i>
-                    Gestión de colores
+                    Gestión de categorias
                 </h1>
                 <p class="text-sm text-slate-500 mt-1">
-                    Listado de colores disponibles
+                    Listado de categorias disponibles
                 </p>
             </div>
 
