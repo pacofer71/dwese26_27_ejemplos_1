@@ -8,6 +8,24 @@ abstract class Navegacion
 {
     public static function pintarBarraNavegacion(): void
     {
+        $localizacion=$_SERVER['PHP_SELF'];
+        $ruta="./cerrar.php";
+        $enlace="./articulos/admin.php";
+        $texto="Gestionar Articulos";
+        if(str_contains($localizacion, 'articulos') || str_contains($localizacion, 'categorias')){
+            $ruta= "./../cerrar.php";
+            $enlace= "./../";
+            $texto= "Inicio";
+        }
+        /*
+        $ruta=(str_contains($localizacion, 'articulos') || str_contains($localizacion, 'categorias')) ? 
+        "./../cerrar.php" : "./cerrar.php";
+        $enlace=(str_contains($localizacion, 'articulos') || str_contains($localizacion, 'categorias')) ?
+        "./../" : "./articulos/admin.php";
+        $texto=(str_contains($localizacion, 'articulos') || str_contains($localizacion, 'categorias')) ?
+        "Inicio" : "Gestionar Articulos";
+        */
+
         $color="";
         if (isset($_SESSION['perfil'])) {
             $color = ($_SESSION['perfil'] == 1) ? "text-red-600" : "text-blue-600";
@@ -24,7 +42,7 @@ abstract class Navegacion
                 >
                 </div>
 
-                <a href="cerrar.php"
+                <a href="$ruta"
                class="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded-lg transition duration-200">
                 <i class="fas fa-sign-out-alt"></i>
                 Logout
@@ -47,10 +65,10 @@ abstract class Navegacion
         <nav class="bg-white border-b border-gray-200 shadow-sm px-6 py-3">
             <div class="max-w-7xl mx-auto flex items-center justify-between">
                 <!-- Logo / Nombre del sitio -->
-                <div class="flex items-center gap-2 text-indigo-600 font-bold text-xl">
+                <a class="flex items-center gap-2 text-indigo-600 font-bold text-xl" href="$enlace">
                     <i class="fas fa-newspaper"></i>
-                    <span>Artículos</span>
-                </div>
+                    <span>$texto</span>
+                </a>
 
             <!-- Usuario y Logout -->
             <div class="flex items-center gap-3">

@@ -19,8 +19,8 @@ abstract class Validacion
         }
         return true;
     }
-    public static function existeCategoria(string $nombre):bool{
-        if(Categoria::existeCategoria($nombre)){
+    public static function existeCategoria(string $nombre, int $id=-1):bool{
+        if(Categoria::existeCategoria($nombre, $id)){
             $_SESSION['err_nombre']="*** Error \"$nombre\" ya está registrada";
             return true;
         }

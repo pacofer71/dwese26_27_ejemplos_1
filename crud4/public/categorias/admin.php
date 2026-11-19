@@ -3,13 +3,13 @@
 use App\Bd\Categoria;
 use App\Utils\Navegacion;
 
-    session_start();
-    if(!isset($_SESSION['perfil']) || $_SESSION['perfil']!=1){
-        header("Location:./../");
-        exit;
-    }
-    require __DIR__."/../../vendor/autoload.php";
-    $categorias=Categoria::read();
+session_start();
+if (!isset($_SESSION['perfil']) || $_SESSION['perfil'] != 1) {
+    header("Location:./../");
+    exit;
+}
+require __DIR__ . "/../../vendor/autoload.php";
+$categorias = Categoria::read();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -67,55 +67,68 @@ use App\Utils\Navegacion;
 
                     <tbody class="divide-y divide-slate-100">
 
-                        <?php foreach($categorias as $item): ?>
-                        <tr class="hover:bg-slate-50 transition">
+                        <?php foreach ($categorias as $item): ?>
+                            <tr class="hover:bg-slate-50 transition">
 
-                            <td class="px-6 py-5 text-sm font-semibold text-slate-500">
-                                #<?= $item->id ?>
-                            </td>
+                                <td class="px-6 py-5 text-sm font-semibold text-slate-500">
+                                    #<?= $item->id ?>
+                                </td>
 
-                            <td class="px-6 py-5">
-                                <span class="font-semibold text-slate-800">
-                                    <?= $item->nombre ?>
-                                </span>
-                            </td>
+                                <td class="px-6 py-5">
+                                    <span class="font-semibold text-slate-800">
+                                        <?= $item->nombre ?>
+                                    </span>
+                                </td>
 
-                            <td class="px-6 py-5">
-                                <span class="inline-flex items-center px-4 py-2 rounded-lg text-white text-sm font-bold shadow-sm"
-                                      style="background-color: <?= $item->color ?>;">
-                                    <?= $item->color ?>
-                                </span>
-                            </td>
+                                <td class="px-6 py-5">
+                                    <span class="inline-flex items-center px-4 py-2 rounded-lg text-white text-sm font-bold shadow-sm"
+                                        style="background-color: <?= $item->color ?>;">
+                                        <?= $item->color ?>
+                                    </span>
+                                </td>
 
-                            <td class="px-6 py-5">
-                                <div class="flex items-center justify-center gap-2">
+                                <td class="px-6 py-5">
+                                    <form action="borrar.php" method="POST">
+                                        <input type="hidden" name="id" value="<?= $item->id ?>" />
+                                        <div class="flex items-center justify-center gap-2">
 
-                                    <a href="editar.php"
-                                       class="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                        Editar
-                                    </a>
+                                            <a href="editar.php?id=<?= $item->id ?>"
+                                                class="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                                Editar
+                                            </a>
 
-                                    <button type="button"
-                                            class="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold text-red-600 bg-red-50 hover:bg-red-100 transition">
-                                        <i class="fa-solid fa-trash"></i>
-                                        Borrar
-                                    </button>
+                                            <button type="submit" onclick="return confirm('¿Eliminar categoría?')"
+                                                class="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold text-red-600 bg-red-50 hover:bg-red-100 transition">
+                                                <i class="fa-solid fa-trash"></i>
+                                                Borrar
+                                            </button>
 
-                                </div>
-                            </td>
+                                        </div>
+                                    </form>
+                                </td>
 
-                        </tr>
-                        <?php endforeach; ?>    
+                            </tr>
+                        <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
 
-           
+
 
         </div>
 
     </div>
+    <?php
+    if (isset($_SESSION['mensaje'])) {
+        echo <<< TXT
+                <script>
+                    Dialogx.notify.success('{$_SESSION['mensaje']}');
+                </script>
+        TXT;
+        unset($_SESSION['mensaje']);
+    }
+    ?>
 
 </body>
 
